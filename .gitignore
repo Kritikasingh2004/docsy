@@ -1,31 +1,20 @@
-Dependencies
+# Dependencies
+**/node_modules/
 
-/node_modules/
-
-Turbo
-
+# Turbo
 .turbo/
 
-Build outputs
+# Build outputs
+**/dist/
+**/build/
+**/.next/
+**/coverage/
 
-/dist/ /build/ /.next/ /coverage/
+# Environment variables
+.env*
+!.env.example
 
-Environment variables
-
-.env* !.env.example
-
-Logs
-
-*.log
-
-TypeScript
-
-*.tsbuildinfo
-
-OS
-
-.DS_Store Thumbs.db
-
-IDE
-
-.vscode/ .idea/
+# Python
+**/.venv/
+**/__pycache__/
+**/*.py[cod]

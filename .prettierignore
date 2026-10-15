@@ -1,0 +1,27 @@
+# Dependencies
+**/node_modules/
+.pnpm-store/
+
+# Turbo
+.turbo/
+
+# Build outputs
+**/dist/
+**/build/
+**/.next/
+**/.nuxt/
+**/.output/
+**/coverage/
+**/storybook-static/
+
+# Python
+**/.venv/
+**/__pycache__/
+**/*.pyc
+
+# Generated files
+pnpm-lock.yaml
+**/next-env.d.ts
+
+# Environment variables
+.env*
