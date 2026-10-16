@@ -16,7 +16,7 @@ def extract_text_by_page(pdf_bytes: bytes) -> list[DocumentPage]:
 
         for page_number, page in enumerate(document, start=1):
             text = page.get_text("text")
-            text = re.sub(r"[\t]+", text)
+            text = re.sub(r"\t+", " ", text)
             text = re.sub(r"\n{3,}", "\n\n", text).strip()
 
             if text:
@@ -33,7 +33,7 @@ def chunk_pages(
     pages: list[DocumentPage],
     chunk_size: int = 400,
     overlap: int = 60,
-) -> list[DocumentPage]:
+) -> list[DocumentChunk]:
     """Split pages into overlapping word-based chunks."""
 
     if chunk_size <= 0:
@@ -42,7 +42,7 @@ def chunk_pages(
     if not 0 <= overlap < chunk_size:
         raise ValueError("overlap must be >=0 and < chunk_size.")
 
-    chunks: list[DocumentPage] = []
+    chunks: list[DocumentChunk] = []
 
     step = chunk_size - overlap
 
