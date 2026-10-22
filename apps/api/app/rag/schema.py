@@ -20,3 +20,10 @@ class DocumentChunk(BaseModel):
 
     text: str = Field(min_length=1)
     metadata: ChunkMetadata
+
+
+class IngestionResult(BaseModel):
+    """Result of ingesting a document."""
+
+    document_id: str
+    chunks: list[DocumentChunk]
