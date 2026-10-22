@@ -3,8 +3,8 @@ from typing import Annotated
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
+from app.rag.ingestion import ingest_pdf
 from app.rag.limit import MAX_PDF_SIZE_BYTES
-from app.rag.pdf import process_pdf
 
 router = APIRouter(prefix="/documents", tags=["Documents"])
 
@@ -36,33 +36,43 @@ async def upload_pdf(
     file: Annotated[UploadFile, File(...)],
 ):
     try:
-        # 1. Quick extension check
-        if Path(file.filename or "").suffix.lower() != ".pdf":
-            raise HTTPException(status_code=415, detail="Only PDF files are supported.")
+        # Check file extension
+        filename = Path(file.filename or "").name
 
-        # 2. Safely read and enforce size limit
+        if Path(filename).suffix.lower() != ".pdf":
+            raise HTTPException(
+                status_code=415,
+                detail="Only PDF files are supported.",
+            )
+
+        # Safely read and enforce size limit
         pdf_bytes = await read_upload(file)
 
-        # 3. Security: Validate PDF Magic Bytes (Ensures it's truly a PDF)
+        # Validate PDF
         if not pdf_bytes.startswith(b"%PDF-"):
             raise HTTPException(
                 status_code=400,
                 detail="Invalid file format. The file is not a valid PDF.",
             )
 
-        # 4. Process the verified PDF bytes
-        chunks = process_pdf(pdf_bytes)
+        # Extract chunks, generate embeddings, and store them
+        result = ingest_pdf(
+            pdf_bytes=pdf_bytes,
+            filename=filename,
+        )
 
+        # Return ingestion result
         return {
-            "filename": Path(file.filename).name,
-            "total_chunks": len(chunks),
+            "document_id": result.document_id,
+            "filename": filename,
+            "total_chunks": len(result.chunks),
             "chunks": [
                 {
                     "text": chunk.text,
                     "page_number": chunk.metadata.page_number,
                     "chunk_index": chunk.metadata.chunk_index,
                 }
-                for chunk in chunks
+                for chunk in result.chunks
             ],
         }
 
