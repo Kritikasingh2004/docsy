@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routes.document import router as document_router
+from app.api.document import router as document_router
 
 app = FastAPI(
     title="Docsy API",

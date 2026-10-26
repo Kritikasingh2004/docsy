@@ -1,8 +1,9 @@
 import ollama
 
-from app.core.config import ollama_embedding_model
+from app.core.config import get_settings
 from app.rag.schema import DocumentChunk
 
+settings = get_settings()
 
 def embed_chunks(chunks: list[DocumentChunk]) -> list[list[float]]:
     """Convert document chunks into nomic embeddibg vectors."""
@@ -13,7 +14,7 @@ def embed_chunks(chunks: list[DocumentChunk]) -> list[list[float]]:
     texts = [chunk.text for chunk in chunks]
 
     response = ollama.embed(
-        model=ollama_embedding_model,
+        model= settings.ollama_embedding_model,
         input=texts,
     )
 
