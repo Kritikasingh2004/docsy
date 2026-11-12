@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     )
 
     chroma_path: Path
+    chroma_collection_name: str = "document_chunks"
 
     ollama_base_url: str
     ollama_embedding_model: str

@@ -12,7 +12,7 @@ def make_chunk(text: str = "chunk") -> DocumentChunk:
 
 
 def test_embed_chunks_returns_empty_list_without_calling_ollama():
-    with patch("app.rag.embeddings.ollama.embed") as embed:
+    with patch("app.rag.embeddings.client.embed") as embed:
         assert embed_chunks([]) == []
 
     embed.assert_not_called()
@@ -24,7 +24,7 @@ def test_embed_chunks_embeds_chunk_texts():
     with (
         patch("app.rag.embeddings.settings.ollama_embedding_model", "test-model"),
         patch(
-            "app.rag.embeddings.ollama.embed",
+            "app.rag.embeddings.client.embed",
             return_value={"embeddings": [[0.1, 0.2], [0.3, 0.4]]},
         ) as embed,
     ):
@@ -39,7 +39,7 @@ def test_embed_chunks_embeds_chunk_texts():
 
 def test_embed_chunks_rejects_mismatched_embedding_count():
     with patch(
-        "app.rag.embeddings.ollama.embed",
+        "app.rag.embeddings.client.embed",
         return_value={"embeddings": [[0.1, 0.2]]},
     ):
         try:

@@ -10,7 +10,7 @@ client = chromadb.PersistentClient(
 )
 
 collection = client.get_or_create_collection(
-    name="document_chunks",
+    name=settings.chroma_collection_name,
     configuration={
         "hnsw": {
             "space": "cosine",

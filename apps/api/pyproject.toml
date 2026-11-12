@@ -1,7 +1,7 @@
 [project]
 name = "docsy-api"
 version = "0.1.0"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 dependencies = [
     "chromadb>=1.5.9",
     "fastapi>=0.143.1",
@@ -40,3 +40,8 @@ indent-style = "space"
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+markers = [
+    "unit: fast tests that do not require external services",
+    "integration: tests that use real local application services",
+    "requires_ollama: tests that require a reachable Ollama server and model",
+]
